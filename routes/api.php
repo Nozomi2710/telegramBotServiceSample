@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,4 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-Route::post('/telegram_bot/messages', function (Request $request) {
-    Log::info('message info', $request->all());
-});
+Route::post('/telegram_bot/messages', [MessageController::class, 'logMessage']);
