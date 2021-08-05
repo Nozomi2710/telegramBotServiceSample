@@ -19,7 +19,7 @@ class CreateMessageLogTable extends Migration
             $table->text('message')->comment('訊息');
             $table->integer('chatRoomId')->comment('聊天室編號');
             $table->integer('userId')->comment('使用者編號');
-            $table->timestamp('datetime')->comment('時間');
+            $table->integer('datetime')->comment('時間');
         });
     }
 
