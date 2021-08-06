@@ -30,9 +30,31 @@ class MessageLogModel
         return DB::insert($sql, $bindingValues);
     }
 
-
-    public function getByChatRoomId(int $id)
+    /**
+     * 依照聊天室編號取得訊息資料
+     *
+     * @param int $chatRoomId
+     * @return array
+     */
+    public function getByChatRoomId(int $chatRoomId) : array
     {
+        $sql = "SELECT * FROM `MessageLog` WHERE `chatRoomId` = :id AND `isCommand` = FALSE";
+        $bindingValues = array(
+            ':id' => $chatRoomId
+        );
 
+        $messages = array();
+        $selectedRows = DB::select($sql, $bindingValues);
+        if (empty($selectedRows)) {
+            return array();
+        }
+
+        foreach ($selectedRows as $selectedRow) {
+            $messageLog = new MessageLog();
+            $messageLog->loadFromStdClass($selectedRow);
+            $messages[] = $messageLog;
+        }
+
+        return $messages;
     }
 }
