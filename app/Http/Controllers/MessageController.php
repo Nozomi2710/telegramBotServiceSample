@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Classes\MessageLog;
+use App\Classes\TelegramBot;
 use App\Models\MessageLogModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -18,8 +20,8 @@ class MessageController
     public function logMessage(Request $request) : \Illuminate\Http\JsonResponse
     {
         $log = new MessageLog();
-        $log->setMessage($request->input('message.text'));
-        $log->setDatetime($request->input('message.date'));
+        $log->setMessage($request->input('message.text', ''));
+        $log->setDatetime($request->input('message.date', Carbon::today()));
         $entities = $request->input('message.entities', array());
         if (empty($entities)) {
             $log->setIsCommand(false);
@@ -33,6 +35,7 @@ class MessageController
 
         $model = new MessageLogModel();
         $success = $model->add($log);
+        $bot = new TelegramBot();
 
         return response()->json(array(), $success ? Response::HTTP_OK : Response::HTTP_INTERNAL_SERVER_ERROR);
     }
